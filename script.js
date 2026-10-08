@@ -4,7 +4,7 @@ const imdbId = params.get("imdb");
 
 
 // Movie information load karna
-async function loadMovie() {
+function loadMovie() {
 
     if (!imdbId) {
 
@@ -15,60 +15,41 @@ async function loadMovie() {
     }
 
 
-    try {
+    const title =
+        params.get("title") || "Movie";
 
-        /*
-        IMPORTANT:
-        OMDb API key browser mein nahi rakhenge.
-        Isliye abhi website ko movie information
-        URL parameters se receive karna hoga.
-        */
+    const year =
+        params.get("year") || "N/A";
 
-        const title =
-            params.get("title") || "Movie";
+    const genre =
+        params.get("genre") || "N/A";
 
-        const year =
-            params.get("year") || "N/A";
+    const rating =
+        params.get("rating") || "N/A";
 
-        const genre =
-            params.get("genre") || "N/A";
+    const poster =
+        params.get("poster") || "";
 
-        const rating =
-            params.get("rating") || "N/A";
-
-        const poster =
-            params.get("poster") || "";
-
-        const description =
-            params.get("description") ||
-            "Your requested link is ready.";
+    const description =
+        params.get("description") ||
+        "Your requested link is ready.";
 
 
-        document.getElementById("moviePoster").src =
-            poster;
+    document.getElementById("moviePoster").src =
+        poster;
 
-        document.getElementById("movieTitle").textContent =
-            title;
+    document.getElementById("movieTitle").textContent =
+        title;
 
-        document.getElementById("movieMeta").textContent =
-            `${year} • ${genre} • ⭐ ${rating}`;
+    document.getElementById("movieMeta").textContent =
+        `${year} • ${genre} • ⭐ ${rating}`;
 
-        document.getElementById("movieDescription").textContent =
-            description;
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        document.getElementById("movieTitle").textContent =
-            "Movie information unavailable.";
-
-    }
-
+    document.getElementById("movieDescription").textContent =
+        description;
 }
 
 
+// Load movie
 loadMovie();
 
 
@@ -77,8 +58,22 @@ document.getElementById("getLinkBtn").addEventListener(
     "click",
     function () {
 
+        const movieData = new URLSearchParams();
+
+        movieData.set("imdb", imdbId);
+        movieData.set("title", params.get("title") || "");
+        movieData.set("year", params.get("year") || "");
+        movieData.set("genre", params.get("genre") || "");
+        movieData.set("rating", params.get("rating") || "");
+        movieData.set("poster", params.get("poster") || "");
+        movieData.set(
+            "description",
+            params.get("description") || ""
+        );
+
+
         window.location.href =
-            `generate.html?imdb=${encodeURIComponent(imdbId)}`;
+            `generate.html?${movieData.toString()}`;
 
     }
 );
